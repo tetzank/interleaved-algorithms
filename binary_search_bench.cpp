@@ -18,4 +18,4 @@ BENCHMARK_TEMPLATE(BM_benchmark, plain_interleaving<8>);
 BENCHMARK_TEMPLATE(BM_benchmark, group_prefetching<4>);
 BENCHMARK_TEMPLATE(BM_benchmark, group_prefetching<8>);
 
-BENCHMARK_MAIN()
+BENCHMARK_MAIN();

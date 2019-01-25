@@ -17,7 +17,7 @@ uint64_t group_prefetching(const uint32_t *array, size_t array_size, const uint3
 			// prefetch stage
 			for(size_t g=0; g<group_size; ++g){
 				const uint32_t *it = arr_first[g] + step;
-				__builtin_prefetch(it, 0, 1);
+				__builtin_prefetch(it, 0, 0);
 			}
 			// load stage
 			for(size_t g=0; g<group_size; ++g){

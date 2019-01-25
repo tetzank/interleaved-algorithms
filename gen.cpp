@@ -15,7 +15,7 @@ int main(int argc, char **argv){
 	std::mt19937 gen;
 	gen.seed(42);
 
-	const size_t size = 64*1024*1024;
+	const size_t size = 4ULL*1024*1024*1024;
 	std::vector<uint32_t> keys(size);
 	for(auto &ele : keys){
 		ele = gen();
