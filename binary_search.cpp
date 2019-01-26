@@ -9,7 +9,7 @@
 #include "binary_search/group_prefetching.hpp"
 
 
-typedef uint64_t(*func_t)(const uint32_t*,size_t,const uint32_t*,size_t);
+typedef uint64_t(*func_t)(const int32_t*,size_t,const int32_t*,size_t);
 
 static void probe(const char *desc, func_t fn, const GenData &gd){
 	auto start = std::chrono::high_resolution_clock::now();

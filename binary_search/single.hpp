@@ -6,10 +6,10 @@
 #include <algorithm>
 
 
-uint64_t stl_binary_search(const uint32_t *array, size_t array_size, const uint32_t *keys, size_t keys_size){
+uint64_t stl_binary_search(const int32_t *array, size_t array_size, const int32_t *keys, size_t keys_size){
 	uint64_t sum=0;
-	const uint32_t *array_end  = array + array_size;
-	for(const uint32_t *ptr=keys, *end=keys+keys_size; ptr!=end; ptr++){
+	const int32_t *array_end  = array + array_size;
+	for(const int32_t *ptr=keys, *end=keys+keys_size; ptr!=end; ptr++){
 		bool found = std::binary_search(array, array_end, *ptr);
 		if(found){
 			sum += *ptr;
@@ -18,10 +18,10 @@ uint64_t stl_binary_search(const uint32_t *array, size_t array_size, const uint3
 	return sum;
 }
 
-uint64_t stl_lower_bound(const uint32_t *array, size_t array_size, const uint32_t *keys, size_t keys_size){
+uint64_t stl_lower_bound(const int32_t *array, size_t array_size, const int32_t *keys, size_t keys_size){
 	uint64_t sum=0;
-	const uint32_t *array_end  = array + array_size;
-	for(const uint32_t *ptr=keys, *end=keys+keys_size; ptr!=end; ptr++){
+	const int32_t *array_end  = array + array_size;
+	for(const int32_t *ptr=keys, *end=keys+keys_size; ptr!=end; ptr++){
 		auto it = std::lower_bound(array, array_end, *ptr);
 		if(*it == *ptr){
 			sum += *ptr;
@@ -30,11 +30,11 @@ uint64_t stl_lower_bound(const uint32_t *array, size_t array_size, const uint32_
 	return sum;
 }
 
-static bool binsearch_single(const uint32_t *first, const uint32_t *last, uint32_t key){
+static bool binsearch_single(const int32_t *first, const int32_t *last, int32_t key){
 	size_t count = last - first;
 	while(count > 0){
 		size_t step = count / 2;
-		const uint32_t *it = first + step; 
+		const int32_t *it = first + step; 
 		if(*it < key){
 			first = it + 1;
 			count = count - step - 1; 
@@ -44,10 +44,10 @@ static bool binsearch_single(const uint32_t *first, const uint32_t *last, uint32
 	}
     return *first == key;
 }
-uint64_t single(const uint32_t *array, size_t array_size, const uint32_t *keys, size_t keys_size){
+uint64_t single(const int32_t *array, size_t array_size, const int32_t *keys, size_t keys_size){
 	uint64_t sum=0;
-	const uint32_t *array_end  = array + array_size;
-	for(const uint32_t *ptr=keys, *end=keys+keys_size; ptr!=end; ptr++){
+	const int32_t *array_end  = array + array_size;
+	for(const int32_t *ptr=keys, *end=keys+keys_size; ptr!=end; ptr++){
 		bool found = binsearch_single(array, array_end, *ptr);
 		if(found){
 			sum += *ptr;
@@ -56,10 +56,10 @@ uint64_t single(const uint32_t *array, size_t array_size, const uint32_t *keys, 
 	return sum;
 }
 
-static bool binsearch_single2(const uint32_t *first, const uint32_t *last, uint32_t key){
+static bool binsearch_single2(const int32_t *first, const int32_t *last, int32_t key){
 	size_t count = last - first;
 	while(size_t step=count/2){
-		const uint32_t *it = first + step; 
+		const int32_t *it = first + step; 
 		if(*it < key){
 			first = it;
 		}
@@ -68,10 +68,10 @@ static bool binsearch_single2(const uint32_t *first, const uint32_t *last, uint3
 	if((count==1) && (*first < key)) first++;
     return *first == key;
 }
-uint64_t single2(const uint32_t *array, size_t array_size, const uint32_t *keys, size_t keys_size){
+uint64_t single2(const int32_t *array, size_t array_size, const int32_t *keys, size_t keys_size){
 	uint64_t sum=0;
-	const uint32_t *array_end  = array + array_size;
-	for(const uint32_t *ptr=keys, *end=keys+keys_size; ptr!=end; ptr++){
+	const int32_t *array_end  = array + array_size;
+	for(const int32_t *ptr=keys, *end=keys+keys_size; ptr!=end; ptr++){
 		bool found = binsearch_single2(array, array_end, *ptr);
 		if(found){
 			sum += *ptr;

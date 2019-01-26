@@ -18,8 +18,8 @@ private:
 
 public:
 	uint64_t number_of_elements;
-	uint32_t *keys;
-	uint32_t *data;
+	int32_t *keys;
+	int32_t *data;
 
 	GenData(const char *fname){
 		int fd = open(fname, O_RDONLY);
@@ -50,9 +50,9 @@ public:
 		addr += sizeof(uint64_t);
 		number_of_elements = *reinterpret_cast<uint64_t*>(addr);
 		addr += sizeof(uint64_t);
-		keys = reinterpret_cast<uint32_t*>(addr);
-		addr += number_of_elements * sizeof(uint32_t);
-		data = reinterpret_cast<uint32_t*>(addr);
+		keys = reinterpret_cast<int32_t*>(addr);
+		addr += number_of_elements * sizeof(int32_t);
+		data = reinterpret_cast<int32_t*>(addr);
 
 		// close file, undo open(), file still open because of mmap()
 		close(fd);
@@ -61,7 +61,7 @@ public:
 		munmap(mapped_addr, fsize);
 	}
 
-	static void writeData(const char *fname, size_t elements, uint32_t *keys, uint32_t *data){
+	static void writeData(const char *fname, size_t elements, int32_t *keys, int32_t *data){
 		FILE *fd = fopen(fname, "wb");
 		if(!fd){
 			perror("failed to open file for writing");
@@ -72,9 +72,9 @@ public:
 		fwrite(&elements, sizeof(size_t), 1, fd); // number of elements
 		//TODO: maybe padding to start with full cache-line
 		// keys
-		fwrite(keys, sizeof(uint32_t), elements, fd);
+		fwrite(keys, sizeof(int32_t), elements, fd);
 		// data
-		fwrite(data, sizeof(uint32_t), elements, fd);
+		fwrite(data, sizeof(int32_t), elements, fd);
 		fclose(fd);
 	}
 };

@@ -6,17 +6,49 @@
 #include "utils/gendata.hpp"
 
 
+void print_usage(){
+	puts(
+R"(optional arguments:
+	-o name          name of output file, default: newdata.dat
+	-i number        seed to initialized random numbers, default: 42
+	-s number        number of keys and data to generate, default: 256 * 2^20
+	-l               enable logging of keys to text file keys.log)"
+	);
+}
+
+
 int main(int argc, char **argv){
-	if(argc < 2){
-		fprintf(stderr, "requires file name as first argument\n");
-		return -1;
+	const char *fname = "newdata.dat";
+	size_t size = 256ULL*1024*1024;
+	uint32_t seed = 42;
+	bool logging = false;
+
+	int opt;
+	while((opt=getopt(argc, argv, "o:i:s:lh")) != -1){
+		switch(opt){
+			case 'o':
+				fname = optarg;
+				break;
+			case 'i':
+				seed = atoi(optarg); //FIXME: error handling
+				break;
+			case 's':
+				size = strtoul(optarg, nullptr, 10);
+				break;
+			case 'l':
+				logging = true;
+				break;
+			case 'h':
+				print_usage();
+				return 0;
+		}
 	}
+	printf("seed: %u; size: %lu\n", seed, size);
 
 	std::mt19937 gen;
-	gen.seed(42);
+	gen.seed(seed); // same seed everytime
 
-	const size_t size = 4ULL*1024*1024*1024;
-	std::vector<uint32_t> keys(size);
+	std::vector<int32_t> keys(size);
 	for(auto &ele : keys){
 		ele = gen();
 	}
@@ -26,21 +58,21 @@ int main(int argc, char **argv){
 	const size_t real_size = keys.size();
 	printf("size without duplicates: %lu\n", real_size);
 
-#ifndef NDEBUG
-	FILE *fd_log = fopen("keys.log", "w");
-	for(const auto &ele : keys){
-		fprintf(fd, "%u\n", ele);
+	if(logging){
+		FILE *fd_log = fopen("keys.log", "w");
+		for(const auto &ele : keys){
+			fprintf(fd_log, "%u\n", ele);
+		}
+		fclose(fd_log);
 	}
-	fclose(fd);
-#endif
 
 	// use keys as data too, but randomly shuffled
-	std::vector<uint32_t> data;
+	std::vector<int32_t> data;
 	data.reserve(real_size);
 	std::copy(keys.begin(), keys.end(), std::back_inserter(data));
 	std::shuffle(data.begin(), data.end(), gen);
 
-	GenData::writeData(argv[1], real_size, keys.data(), data.data());
+	GenData::writeData(fname, real_size, keys.data(), data.data());
 
 	return 0;
 }
