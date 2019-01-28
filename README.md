@@ -12,14 +12,14 @@ $ cmake ..
 $ make
 ```
 
-Generate some simple test data:
+Generate some simple test data (creates by default 'newdata.dat'):
 ```
-$ ./gen newdata.dat
+$ ./gen
 ```
 
-Run test program:
+Run test program (uses by default 'newdata.dat'):
 ```
-$ ./binary_search newdata.dat
+$ ./binary_search
 ```
 
 If you compiled with google benchmark support (file name 'newdata.dat' hardcoded atm):

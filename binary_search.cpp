@@ -24,16 +24,37 @@ static void probe(const char *desc, func_t fn, const GenData &gd){
 	printf("%23s: %'10lu us; sum: %lu\n", desc, time, sum);
 }
 
+static void print_usage(){
+	puts(
+R"(optional arguments:
+	-i name          name of input file, default: newdata.dat)"
+	);
+}
+
 int main(int argc, char **argv){
-	if(argc < 2){
-		fprintf(stderr, "requires import file as first argument\n");
-		return -1;
+	const char *fname = "newdata.dat";
+
+	int opt;
+	while((opt=getopt(argc, argv, "i:h")) != -1){
+		switch(opt){
+			case 'i':
+				fname = optarg;
+				break;
+			case 'h':
+				print_usage();
+				return 0;
+
+			default:
+				// abort when unknown option, getopt() already prints message
+				return -1;
+		}
 	}
+
 	// set locale for this program to whatever is set system-wide
 	// otherwise digit separators with printf would not work
 	setlocale(LC_NUMERIC, "");
 
-	GenData gd(argv[1]);
+	GenData gd(fname);
 
 	// for now use data column as search keys which is not the best
 	//TODO: get search keys which are not all hitting

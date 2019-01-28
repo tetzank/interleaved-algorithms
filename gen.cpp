@@ -6,7 +6,7 @@
 #include "utils/gendata.hpp"
 
 
-void print_usage(){
+static void print_usage(){
 	puts(
 R"(optional arguments:
 	-o name          name of output file, default: newdata.dat
@@ -33,7 +33,7 @@ int main(int argc, char **argv){
 				seed = atoi(optarg); //FIXME: error handling
 				break;
 			case 's':
-				size = strtoul(optarg, nullptr, 10);
+				size = strtoul(optarg, nullptr, 10); //FIXME: error handling
 				break;
 			case 'l':
 				logging = true;
@@ -41,6 +41,10 @@ int main(int argc, char **argv){
 			case 'h':
 				print_usage();
 				return 0;
+
+			default:
+				// abort when unknown option, getopt() already prints message
+				return -1;
 		}
 	}
 	printf("seed: %u; size: %lu\n", seed, size);
