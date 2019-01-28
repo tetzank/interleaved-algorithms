@@ -1,4 +1,5 @@
 #include <cstdio>
+#include <clocale>
 #include <chrono>
 #include <algorithm>
 
@@ -7,6 +8,7 @@
 #include "binary_search/single.hpp"
 #include "binary_search/plain_interleaving.hpp"
 #include "binary_search/group_prefetching.hpp"
+#include "binary_search/simd.hpp"
 
 
 typedef uint64_t(*func_t)(const int32_t*,size_t,const int32_t*,size_t);
@@ -14,12 +16,12 @@ typedef uint64_t(*func_t)(const int32_t*,size_t,const int32_t*,size_t);
 static void probe(const char *desc, func_t fn, const GenData &gd){
 	auto start = std::chrono::high_resolution_clock::now();
 
-	uint64_t sum = fn(gd.keys, gd.number_of_elements, gd.data, 4*1024*1024);
-	//uint64_t sum = fn(gd.keys, gd.number_of_elements, gd.data, gd.number_of_elements);
+	//uint64_t sum = fn(gd.keys, gd.number_of_elements, gd.data, 4*1024*1024);
+	uint64_t sum = fn(gd.keys, gd.number_of_elements, gd.data, gd.number_of_elements);
 
 	auto end = std::chrono::high_resolution_clock::now();
 	auto time = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
-	printf("%23s: %7lu us; sum: %lu\n", desc, time, sum);
+	printf("%23s: %'10lu us; sum: %lu\n", desc, time, sum);
 }
 
 int main(int argc, char **argv){
@@ -27,6 +29,9 @@ int main(int argc, char **argv){
 		fprintf(stderr, "requires import file as first argument\n");
 		return -1;
 	}
+	// set locale for this program to whatever is set system-wide
+	// otherwise digit separators with printf would not work
+	setlocale(LC_NUMERIC, "");
 
 	GenData gd(argv[1]);
 
@@ -37,6 +42,8 @@ int main(int argc, char **argv){
 	probe("std::lower_bound", stl_lower_bound, gd);
 	probe("single", single, gd);
 	probe("single2", single2, gd);
+	probe("simd_avx2", simd_avx2, gd);
+	probe("simd_avx2_interleaved2", simd_avx2_interleaved2, gd);
 	probe("plain_interleaving4", plain_interleaving4, gd);
 	probe("plain_interleaving8", plain_interleaving8, gd);
 	probe("plain_interleaving<4>", plain_interleaving<4>, gd);
