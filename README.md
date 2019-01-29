@@ -19,8 +19,9 @@ $ ./gen
 
 Run test program (uses by default 'newdata.dat'):
 ```
-$ ./binary_search
+$ ./binary_search -k $((4*1024*1024))
 ```
+Use `-h` to access the help for each program.
 
 If you compiled with google benchmark support (file name 'newdata.dat' hardcoded atm):
 ```
