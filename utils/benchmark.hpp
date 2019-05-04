@@ -5,7 +5,7 @@
 
 #include "gendata.hpp"
 
-template<uint64_t(*fn)(const uint32_t*,size_t,const uint32_t*,size_t)>
+template<uint64_t(*fn)(const int32_t*, size_t, const int32_t*, size_t)>
 static void BM_benchmark(benchmark::State &state){
 	GenData gd("newdata.dat"); //FIXME: hardcoded file name
 	//for(auto _ : state){
