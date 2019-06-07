@@ -5,7 +5,6 @@
 
 
 uint64_t simd_avx2(const int32_t *array, size_t array_size, const int32_t *keys, size_t keys_size){
-#ifdef __AVX2__
 	const size_t group_size=8;
 	uint64_t sum=0, i=0;
 	size_t size = (keys_size / group_size) * group_size;
@@ -56,14 +55,9 @@ uint64_t simd_avx2(const int32_t *array, size_t array_size, const int32_t *keys,
 		}
 	}
 	return sum;
-#else
-	puts("AVX2 not supported");
-	return 0;
-#endif
 }
 
 uint64_t simd_avx2_interleaved2(const int32_t *array, size_t array_size, const int32_t *keys, size_t keys_size){
-#ifdef __AVX2__
 	const size_t group_size=16;
 	uint64_t sum=0, i=0;
 	size_t size = (keys_size / group_size) * group_size;
@@ -135,10 +129,6 @@ uint64_t simd_avx2_interleaved2(const int32_t *array, size_t array_size, const i
 		}
 	}
 	return sum;
-#else
-	puts("AVX2 not supported");
-	return 0;
-#endif
 }
 
 #endif

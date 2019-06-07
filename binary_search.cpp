@@ -10,7 +10,10 @@
 #include "binary_search/single.hpp"
 #include "binary_search/plain_interleaving.hpp"
 #include "binary_search/group_prefetching.hpp"
+
+#ifdef __AVX2__
 #include "binary_search/simd.hpp"
+#endif
 
 
 typedef uint64_t(*func_t)(const int32_t*,size_t,const int32_t*,size_t);
@@ -25,8 +28,10 @@ static const functions_t impls[] = {
 	{"std::lower_bound", stl_lower_bound},
 	{"single", single},
 	{"single2", single2},
+#ifdef __AVX2__
 	{"simd_avx2", simd_avx2},
 	{"simd_avx2_interleaved2", simd_avx2_interleaved2},
+#endif
 	{"plain_interleaving4", plain_interleaving4},
 	{"plain_interleaving8", plain_interleaving8},
 	{"plain_interleaving<4>", plain_interleaving<4>},
